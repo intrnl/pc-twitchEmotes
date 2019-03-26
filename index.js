@@ -73,7 +73,15 @@ class TwitchEmotes extends Plugin {
       
       const jumboable = !markup.some((child) => {
         if (typeof child !== 'string') {
-          if (typeof child === 'object' && ['em', 'strong', 'u', 's', 'code', 'pre', 'span'].includes(child.type)) return true
+          // Markdown
+          if (typeof child === 'object' &&
+            ['em', 'strong', 'u', 's', 'code', 'pre'].includes(child.type)) return true
+
+          // Mentions
+          if (typeof child === 'object' &&
+            child.props.children &&
+            child.props.children.type.displayName &&
+            child.props.children.type.displayName === 'Mention') return true
 
           return false
         }
