@@ -87,7 +87,7 @@ class TwitchEmotes extends Plugin {
         if (typeof child !== 'string') {
           if (typeof child === 'object') {
             const emoji = child.props.children
-            if (emoji.props && emoji.props.emojiName) emoji.props.jumboable = jumboable
+            if (emoji && emoji.props && emoji.props.emojiName) emoji.props.jumboable = jumboable
           }
   
           newMarkup.push(child)
