@@ -80,6 +80,7 @@ class TwitchEmotes extends Plugin {
           // Mentions
           if (typeof child === 'object' &&
             child.props.children &&
+            child.props.children.type && 
             child.props.children.type.displayName &&
             child.props.children.type.displayName === 'Mention') return true
 
