@@ -2,6 +2,8 @@
 
 Adds Twitch emotes, what more could you want?
 
+_**NOTE**: The emote data is large, it may take a while before the emote store is fully initialized._
+
 ## Installation
 
 Clone this repository to your Powercord installation's plugins folder
