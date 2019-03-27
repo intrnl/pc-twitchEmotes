@@ -9,12 +9,9 @@ const EmoteProviders = require('./emotes/provider.json')
 
 const path = require('path')
 const fs = require('fs')
+const StreamArray = require('./dependencies/StreamArray.js')
 
 class TwitchEmotes extends Plugin {
-  get EmoteComponent () {
-    return Emote
-  }
-
   async start () {
     if (!this.initializedEmoteStore) await this.initializeEmoteStore()
     
@@ -36,22 +33,26 @@ class TwitchEmotes extends Plugin {
   
   async initializeEmoteStore () {
     this.log('Initializing emotes store')
-    const rawFile = await fs.readFileSync(this.emotePath)
-    const file = await JSON.parse(rawFile)
+    
+    const jsonStream = StreamArray.withParser()
 
-    file
-      .forEach((emote) => {
-        const { id: name, type: set, value } = emote
+    jsonStream.on('data', ({ value: emote }) => {
+      const { id: name, type: set, value } = emote
 
-        this.emoteStore.set(name, {
-          name,
-          set,
-          id: value.id || value,
-          src: EmoteProviders[set].replace(':id', value.id || value),
-        })
+      this.emoteStore.set(name, {
+        name,
+        set,
+        id: value.id || value,
+        src: EmoteProviders[set].replace(':id', value.id || value),
       })
+    })
 
-    this.initializedEmoteStore = true
+    jsonStream.on('end', () => {
+      this.initializedEmoteStore = true
+      this.log('Finished initializing emotes store')
+    })
+
+    fs.createReadStream(this.emotePath).pipe(jsonStream.input)
   }
 
   findEmoteByName (name, simple = true) {

@@ -13,3 +13,7 @@ git clone https://github.com/intrnl/pc-twitchEmotes.git
 ## Usage
 
 Wrap your emotes in semicolons to have it show up, for example `;OpieOP;`
+
+## Misc
+
+Uses the `StreamArray` streamer from [`stream-json`](https://www.npmjs.com/package/stream-json) package.
