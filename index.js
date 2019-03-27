@@ -28,7 +28,7 @@ class TwitchEmotes extends Plugin {
     return path.join(__dirname, 'emotes', 'store.json')
   }
   get emoteStore () {
-    return this._db || (this._db = new Map())
+    return this._emotes || (this._emotes = new Map)
   }
   
   async initializeEmoteStore () {
@@ -104,20 +104,19 @@ class TwitchEmotes extends Plugin {
           continue
         }
   
-        if (!/;(\w+);/g.test(child)) {
-          newMarkup.push(child)
-          continue
-        }
-  
         const words = child.split(/([^\s]+)([\s]|$)/g).filter(f => f !== '');
         let str = ''
   
         for (const word of words) {
-          const isEmote = /;(.*?);/g.exec(word)
+          let isEmote = /;(.*?);/g.exec(word)
   
           if (!isEmote) {
-            str += word
-            continue
+            if (_this.settings.get('unwrappedEmote')) {
+              isEmote = [0, word]
+            } else {
+              str += word
+              continue
+            }
           }
   
           const emote = _this.findEmoteByName(isEmote[1])
