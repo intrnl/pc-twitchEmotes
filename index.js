@@ -1,7 +1,7 @@
 'use strict'
 
-const Plugin = require('powercord/Plugin')
-const { getModule, getModuleByDisplayName } = require('powercord/webpack')
+const { Plugin } = require('powercord/entities')
+const { getModuleByDisplayName } = require('powercord/webpack')
 const { inject, uninject } = require('powercord/injector')
 
 const Emote = require('./emotes/EmoteComponent.jsx')
@@ -12,13 +12,13 @@ const fs = require('fs')
 const StreamArray = require('./dependencies/StreamArray.js')
 
 class TwitchEmotes extends Plugin {
-  async start () {
+  async startPlugin () {
     if (!this.initializedEmoteStore) await this.initializeEmoteStore()
     
     this.patchMessageContent()
   }
   
-  unload () {
+  pluginWillUnload () {
     uninject('pc-twitchEmotes-MessageContent')
   }
   
